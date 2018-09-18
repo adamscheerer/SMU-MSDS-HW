@@ -1,0 +1,97 @@
+---
+title: "Live Session Unit 03 Assignment"
+author: "Adam Scheerer"
+date: "September 17, 2018"
+output: html_document
+
+---
+
+# Github link
+https://github.com/adamscheerer/SMU-MSDS-HW/
+
+# Question 1 Github cloning
+### Here is the code I entered in my terminal.
+
+mkdir -p gitrepo/git/etc    
+cd ~/gitrepo/git/etc  
+git clone https://github.com/awesomedata/awesome-public-datasets.git  
+
+
+# Question 2
+### Part b
+```{r cars, echo = TRUE}
+titanic <- read.csv("~/gitrepo/git/etc/awesome-public-datasets/Datasets/titanic.csv")
+summary(titanic)
+
+number.of.females <- length(which(titanic[5]=="female"))
+number.of.females  # Here we see the count of females aboard is 314.
+number.of.males <- length(which(titanic[5]=='male'))
+number.of.males  # Here we see the count of males aboard is 577.
+```
+
+### Part c
+Here the first thing to do was to create a data frame of the Survival, Age, and Fare columns.
+``` {r, echo = TRUE}
+survival.age.fare <- data.frame(titanic[,2],titanic[,6],titanic[,10],na.rm=TRUE)
+lapply(survival.age.fare,mean,na.rm=TRUE)  #creating a data frame and using lapply we are                            able to get means of the surivival, age, and fare aboad the Titanic.
+
+  
+```
+# Question 3
+
+``` {r,echo = TRUE}
+
+sleep_data_01 <- read.csv("~/Downloads/MSDS Unit 3/sleep_data_01.csv")
+make.a.report <- function(x,na.rm=TRUE){
+  median.age <- median(sleep_data_01$Age, na.rm= TRUE)
+  min.duration <- min(sleep_data_01$Duration, na.rm=TRUE)
+  max.duration<- max(sleep_data_01$Duration, na.rm=TRUE)
+  mean.rses <- mean(sleep_data_01$RSES, na.rm=TRUE)
+  sd.rses<-sd(sleep_data_01$RSES, na.rm=TRUE)
+  
+  report <- data.frame(median.age,mean.rses/5,sd.rses/5,(max.duration-min.duration))
+  colnames(report)<-c('MedianAge','SelfEsteem','SE_SD','DurationNames')
+  round(report,2)
+}
+question.3.report <- make.a.report(x)
+question.3.report
+
+
+
+
+```
+# Question 4
+```{r,echo=TRUE}
+#below is the url for the related data
+#http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+library(fivethirtyeight)
+data(package = 'fivethirtyeight')
+df <- college_recent_grads
+dim(df)    #This shows us the dimensions of our dataset as 21 columns of 173 rows of data
+colnames(df[1,])  #This shows us our column names
+```
+
+#Question 5
+```{r, echo=TRUE}
+colnames(df[1,])    #Here again we get our list of column names
+ncol(df)            #Here is the number of columns which matches our code from line 78 of the previous question
+
+major_count <- as.data.frame(table(df[4]))    #This creates a data frame of the frequency of each category in major_category
+major_count
+
+write.csv(df,'college_recent_grad_data.csv')  #Here is the code to write the data to a .csv
+```
+## Plot for Question 2
+
+```{r pressure, echo=TRUE}
+plots <- barplot(table(titanic$Sex),col=c('blue4', 'red'),main = 'Genders aboard the Titanic', xlab = 'Sex aboard Titanic', ylab= "Frequency")
+
+```
+
+## Plot for Question 5
+```{r,echo=TRUE}
+par(las=2)
+major_count_plot <- barplot(table(df[4]),horiz=T,ylab = 'Chosen Major',xlab = 'Number of chosen major',main = 'Majors of Recent College Graduates',col='blue4')
+major_count_plot
+```
+
